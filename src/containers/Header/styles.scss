@@ -1,0 +1,15 @@
+@import '../../theme/variables';
+
+.header {
+  z-index: 300;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 15px;
+
+  img {
+    float: left;
+    height: 70px;
+    margin-right: 1em;
+  }
+}

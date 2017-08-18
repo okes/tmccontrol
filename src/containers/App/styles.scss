@@ -1,27 +1,31 @@
 @import '../../theme/variables';
 
+html,
 body {
   background-color: $color-dark-gray;
   font-family: 'Helvetica-Light', Helvetica, Arial, sans-serif;
+  overflow: hidden;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  text-rendering: optimizeLegibility;
 }
 
 .App {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   color: $color-white;
 
-  .header {
-    overflow: auto;
-    padding: 15px;
-
-    img {
-      float: left;
-      height: 70px;
-      margin-right: 1em;
-    }
-  }
-
-  hr {
-    margin-bottom: 0;
-    margin-top: 0;
-    opacity: 0.15;
+  .wrapswitch {
+    backface-visibility: visible;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 270;
+    position: absolute;
+    width: 100%;
+    height: 100%;
   }
 }

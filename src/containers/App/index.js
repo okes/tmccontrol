@@ -11,6 +11,8 @@ import routes from '../../routes';
 import '../../theme/normalize.css';
 import styles from './styles.scss';
 
+import HeaderPage from '../Header';
+
 export default () => {
   // Use it when sub routes are added to any route it'll work
   const routeWithSubRoutes = route => (
@@ -28,14 +30,12 @@ export default () => {
   return (
     <div className={styles.App}>
       <Helmet {...config.app} />
-      <div className={styles.header}>
-        <img src={require('./assets/logo.svg')} alt="Logo" role="presentation" />
-        <h1>{config.app.title}</h1>
+      <HeaderPage />
+      <div className={styles.wrapswitch}>
+        <Switch>
+          {routes.map(route => routeWithSubRoutes(route))}
+        </Switch>
       </div>
-      <hr />
-      <Switch>
-        {routes.map(route => routeWithSubRoutes(route))}
-      </Switch>
     </div>
   );
 };

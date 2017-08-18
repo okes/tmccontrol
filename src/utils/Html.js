@@ -54,6 +54,10 @@ const Html = ({ store, htmlContent }: Props) => {
                 // $FlowFixMe: It's not an issue
                 require('../containers/Home/styles.scss')._style +
                 // $FlowFixMe: It's not an issue
+                require('../containers/Header/styles.scss')._style +
+                // $FlowFixMe: It's not an issue
+                require('../containers/Login/styles.scss')._style +
+                // $FlowFixMe: It's not an issue
                 require('../containers/UserInfo/styles.scss')._style +
                 // $FlowFixMe: It's not an issue
                 require('../containers/NotFound/styles.scss')._style +

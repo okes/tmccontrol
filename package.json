@@ -58,7 +58,7 @@
     "start": {
       "command": "nodemon ./index.js --exec babel-node",
       "env": {
-	    "NODE_HOST": "localhost",
+        "NODE_HOST": "localhost",
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 3000
@@ -67,7 +67,7 @@
     "start:prod": {
       "command": "node ./index.js",
       "env": {
-	    "NODE_HOST": "127.0.0.1",
+        "NODE_HOST": "127.0.0.1",
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
         "PORT": 3000

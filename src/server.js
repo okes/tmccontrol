@@ -127,9 +127,6 @@ if (port) {
     if (err) console.error(`==> 😭  OMG!!! ${err}`);
 
     console.info(chalk.green(`==> 🌎  Listening at ${url}`));
-
-    // Open Chrome
-    require('../tools/openBrowser')(url);
   });
 } else {
   console.error(chalk.red('==> 😭  OMG!!! No PORT environment variable has been specified'));

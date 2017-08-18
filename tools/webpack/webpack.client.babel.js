@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const BabiliPlugin = require('babili-webpack-plugin');
-
 const { CSSModules, eslint, stylelint, vendor } = require('./config');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -161,7 +160,11 @@ module.exports = {
                 minimize: !isDev,
               },
             },
-            { loader: 'postcss', options: { sourceMap: true } },
+            { loader: 'postcss',
+              options: {
+                sourceMap: true,
+              } 
+            },
             {
               loader: 'sass',
               options: {
