@@ -50,27 +50,17 @@ const Html = ({ store, htmlContent }: Props) => {
                 // $FlowFixMe: It's not an issue
                 require('../theme/normalize.css')._style +
                 // $FlowFixMe: It's not an issue
-                require('../containers/App/styles.scss')._style +
+                require('font-awesome/css/font-awesome.min.css')._style +
                 // $FlowFixMe: It's not an issue
-                require('../containers/Home/styles.scss')._style +
+                require('simple-line-icons/css/simple-line-icons.css')._style +
                 // $FlowFixMe: It's not an issue
-                require('../containers/Header/styles.scss')._style +
-                // $FlowFixMe: It's not an issue
-                require('../containers/Login/styles.scss')._style +
-                // $FlowFixMe: It's not an issue
-                require('../containers/UserInfo/styles.scss')._style +
-                // $FlowFixMe: It's not an issue
-                require('../containers/NotFound/styles.scss')._style +
-                // $FlowFixMe: It's not an issue
-                require('../components/UserList/styles.scss')._style +
-                // $FlowFixMe: It's not an issue
-                require('../components/UserCard/styles.scss')._style,
+                require('../containers/App/styles.scss')._style,
               }}
             />
             : null
         }
       </head>
-      <body>
+      <body className="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
         <div
           id="react-view"
           // Rendering the route, which passed from server-side

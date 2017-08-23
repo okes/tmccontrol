@@ -3,9 +3,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const BabiliPlugin = require('babili-webpack-plugin');
-const { CSSModules, eslint, stylelint, vendor } = require('./config');
+const { CSSModules, eslint, vendor } = require('./config');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isDev = nodeEnv !== 'production';
@@ -32,8 +31,6 @@ const getPlugins = () => {
         minimize: !isDev,
       },
     }),
-    // Style lint
-    new StyleLintPlugin({ syntax: 'scss', failOnError: stylelint }),
     // Setup enviorment variables for client
     new webpack.EnvironmentPlugin({ NODE_ENV: JSON.stringify(nodeEnv) }),
     // Setup global variables for client
@@ -69,6 +66,8 @@ const getPlugins = () => {
 const getEntry = () => {
   // For development
   let entry = [
+    'aws-sdk/dist/aws-sdk',
+    'amazon-cognito-identity-js',
     'babel-polyfill', // Support promise for IE browser (for dev)
     'react-hot-loader/patch',
     'webpack-hot-middleware/client?reload=true',
@@ -163,7 +162,7 @@ module.exports = {
             { loader: 'postcss',
               options: {
                 sourceMap: true,
-              } 
+              },
             },
             {
               loader: 'sass',
@@ -177,9 +176,23 @@ module.exports = {
         }),
       },
       {
-        test: /\.(woff2?|ttf|eot|svg)$/,
-        loader: 'url',
-        options: { limit: 10000 },
+        test: /\.(png|jpg|jpeg|gif|ico)$/,
+        use: [
+          {
+            // loader: 'url-loader'
+            loader: 'file-loader',
+            options: {
+              name: './img/[name].[hash].[ext]',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader',
+        options: {
+          name: './fonts/[name].[hash].[ext]',
+        },
       },
       {
         test: webpackIsomorphicToolsPlugin.regular_expression('images'),

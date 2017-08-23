@@ -1,31 +1,9 @@
+/* stylelint-disable */
+@import "scss/bootstrap-variables";
+@import "scss/bootstrap/bootstrap";
+@import "scss/vendors/vendors";
+@import "scss/core-variables";
+@import "scss/core/core";
+@import "scss/custom";
 @import '../../theme/variables';
-
-html,
-body {
-  background-color: $color-dark-gray;
-  font-family: 'Helvetica-Light', Helvetica, Arial, sans-serif;
-  overflow: hidden;
-  margin: 0;
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  text-rendering: optimizeLegibility;
-}
-
-.App {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  color: $color-white;
-
-  .wrapswitch {
-    backface-visibility: visible;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 270;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-}
+/* stylelint-enable */

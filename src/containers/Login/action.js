@@ -7,46 +7,44 @@ import type {
   Reducer,
 } from '../../types';
 
+export const LOGIN_CLOSE = 'LOGIN_CLOSE';
+export const LOGIN_OPEN = 'LOGIN_OPEN';
 export const LOGIN_INVALID = 'LOGIN_INVALID';
 export const LOGIN_REQUESTING = 'LOGIN_REQUESTING';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const TYPE_OPEN_LOGIN = 'TYPE_OPEN_LOGIN';
+export const TYPE_OPEN_REGISTER = 'TYPE_OPEN_REGISTER';
+export const TYPE_OPEN_RESET_PASSWORD = 'TYPE_OPEN_RESET_PASSWORD';
+export const TYPE_OPEN_CHANGE_PASSWORD = 'TYPE_OPEN_CHANGE_PASSWORD';
+export const TYPE_OPEN_UPDATE_EMAIL = 'TYPE_OPEN_UPDATE_EMAIL';
 
-export const API_URL = 'https://jsonplaceholder.typicode.com/users';
-
-// Export this for unit testing more easily
-export const fetchUsers = (axios: any, URL: string = API_URL): ThunkAction =>
-  (dispatch: Dispatch) => {
-    dispatch({ type: LOGIN_REQUESTING });
-
-    return axios.get(URL)
-      .then(res => dispatch({ type: LOGIN_SUCCESS, data: res.data }))
-      .catch(err => dispatch({ type: LOGIN_FAILURE, err: err.message }));
-  };
-
-// Preventing dobule fetching data
-/* istanbul ignore next */
-const shouldFetchUsers = (state: Reducer): boolean => {
-  // In development, we will allow action dispatching
-  // or your reducer hot reloading won't updated on the view
-  if (__DEV__) return true;
-
+const isIgual = (state: Reducer, _state:Boolean, _newtype: String): boolean => {
   const login = state.login;
 
-  if (login.readyStatus === LOGIN_SUCCESS) return false; // Preventing double fetching data
+  if (_state === true) {
+    if (login.isopen === _state && login.typeopen === _newtype) return true;
+  } else if (login.isopen === _state) {
+    return true;
+  }
 
-  return true;
+  return false;
 };
 
-/* istanbul ignore next */
-export const fetchLoginIfNeeded = (): ThunkAction =>
-  (dispatch: Dispatch, getState: GetState, axios: any) => {
-    /* istanbul ignore next */
-    if (shouldFetchUsers(getState())) {
-      /* istanbul ignore next */
-      return dispatch(fetchUsers(axios));
+export const openLogin = (_type: String): ThunkAction =>
+  (dispatch: Dispatch, getState: GetState) => {
+    if (!isIgual(getState(), true, _type)) {
+      dispatch({ type: LOGIN_OPEN, newtype: _type });
     }
 
-    /* istanbul ignore next */
+    return null;
+  };
+
+export const closeLogin = (): ThunkAction =>
+  (dispatch: Dispatch, getState: GetState) => {
+    if (!isIgual(getState(), false, '')) {
+      dispatch({ type: LOGIN_CLOSE });
+    }
+
     return null;
   };

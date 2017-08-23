@@ -6,11 +6,13 @@ import { connect } from 'react-redux';
 import type { Element } from 'react';
 import type { Connector } from 'react-redux';
 
-import LoginPage from '../Login';
-import type { Auth as AuthType, Reducer } from '../../types';
+import * as actionLogin from '../Login/action';
+import type { Auth as AuthType, Login as LoginType, Dispatch, Reducer } from '../../types';
 
 type Props = {
   auth: AuthType,
+  login: LoginType,
+  showLogin: () => void,
 };
 
 export default function (Component) {
@@ -20,14 +22,14 @@ export default function (Component) {
 
     static defaultProps: {
       auth: {},
+      login: {},
+      showLogin: () => {},
     };
 
-    componentDidMount() {
-      console.log('componentDidMount: AuthenticatedComponent');
-    }
+    componentDidMount() { }
 
     renderUserList = (): Element<any> => {
-      const { auth } = this.props;
+      const { login, auth, showLogin } = this.props;
 
       if (auth.signedIn === true) {
         return (
@@ -35,7 +37,11 @@ export default function (Component) {
         );
       }
 
-      return <LoginPage />;
+      if (login.isopen !== true) {
+        showLogin();
+      }
+
+      return null;
     }
 
     render() {
@@ -48,7 +54,9 @@ export default function (Component) {
 
   const connector: Connector<{}, Props> = connect(
     ({ login, auth }: Reducer) => ({ login, auth }),
-    () => ({ }),
+    (dispatch: Dispatch) => ({
+      showLogin: () => dispatch(actionLogin.openLogin(actionLogin.TYPE_OPEN_LOGIN)),
+    }),
   );
 
   return connector(AuthenticatedComponent);

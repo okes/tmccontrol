@@ -1,13 +1,13 @@
 /* @flow */
-
 import { routerMiddleware } from 'react-router-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import chalk from 'chalk';
-
 import type { Store } from '../types';
 import rootReducer from './reducers';
+import { setupCognito } from '../utils/cognito/policy';
+import appSecrets from '../utils/appSecrets';
 
 export default (history: Object, initialState: Object = {}): Store => {
   const middlewares = [
@@ -22,6 +22,8 @@ export default (history: Object, initialState: Object = {}): Store => {
   ];
 
   const store: Store = createStore(rootReducer, initialState, compose(...enhancers));
+
+  setupCognito(store, appSecrets.aws.config.group);
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers

@@ -1,17 +1,22 @@
 /* @flow */
-
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import { Container } from 'reactstrap';
 import Helmet from 'react-helmet';
 import _ from 'lodash';
 
-import config from '../../config';
-import routes from '../../routes';
-// Import your global styles here
-import '../../theme/normalize.css';
-import styles from './styles.scss';
+import 'font-awesome/css/font-awesome.min.css';
+import 'simple-line-icons/css/simple-line-icons.css';
 
-import HeaderPage from '../Header';
+import allroutes from '../../routes';
+import '../../theme/normalize.css';
+import './styles.scss';
+
+import HeaderPage from '../../components/UI/HeaderAdmin';
+import SideBarPage from '../../components/UI/SideBarAdmin';
+import BreadCrumbPage from '../../components/UI/BreadCrumbAdmin';
+import FooterPage from '../../components/UI/FooterAdmin';
+import LoginPage from '../Login';
 
 export default () => {
   // Use it when sub routes are added to any route it'll work
@@ -28,13 +33,23 @@ export default () => {
   );
 
   return (
-    <div className={styles.App}>
-      <Helmet {...config.app} />
-      <HeaderPage />
-      <div className={styles.wrapswitch}>
-        <Switch>
-          {routes.map(route => routeWithSubRoutes(route))}
-        </Switch>
+    <div>
+      <LoginPage />
+      <div id="divapp" className="app d-none">
+        <Helmet title="Home" />
+        <HeaderPage />
+        <div className="app-body">
+          <SideBarPage />
+          <main className="main">
+            <BreadCrumbPage />
+            <Container fluid>
+              <Switch>
+                {allroutes.map(route => routeWithSubRoutes(route))}
+              </Switch>
+            </Container>
+          </main>
+        </div>
+        <FooterPage />
       </div>
     </div>
   );

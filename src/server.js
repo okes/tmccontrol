@@ -1,5 +1,4 @@
 /* @flow */
-
 import path from 'path';
 import morgan from 'morgan';
 import express from 'express';
@@ -17,7 +16,7 @@ import createHistory from 'history/createMemoryHistory';
 import configureStore from './redux/store';
 import Html from './utils/Html';
 import App from './containers/App';
-import routes from './routes';
+import allroutes from './routes';
 import { port, host } from './config';
 
 const app = express();
@@ -72,8 +71,7 @@ app.get('*', (req, res) => {
   // Load data on server-side
   const loadBranchData = () => {
     const promises = [];
-
-    routes.some((route) => {
+    allroutes.some((route) => {
       const match = matchPath(req.url, route);
 
       // $FlowFixMe: the params of pre-load actions are dynamic
@@ -116,7 +114,7 @@ app.get('*', (req, res) => {
     .catch((err) => {
       res.status(404).send('Not Found :(');
 
-      console.error(`==> 😭  Rendering routes error: ${err}`);
+      console.error(`==> 😭  Rendering allroutes error: ${err}`);
     });
 });
 

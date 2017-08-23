@@ -9,6 +9,7 @@ import type {
 
 export const AUTH_LOGOUT = 'LOGOUT';
 export const AUTH_LOGIN = 'LOGIN';
+export const AUTH_SAVE_LOGIN = 'AUTH_SAVE_LOGIN';
 
 const isLoggin = (state: Reducer): boolean => {
   const auth = state.auth;
@@ -18,10 +19,19 @@ const isLoggin = (state: Reducer): boolean => {
   return true;
 };
 
-export const login = (_username: String, _password: String): ThunkAction =>
+export const login = (): ThunkAction =>
   (dispatch: Dispatch, getState: GetState) => {
     if (!isLoggin(getState())) {
-      dispatch({ type: AUTH_LOGIN, username: _username, password: _password });
+      dispatch({ type: AUTH_LOGIN });
+    }
+
+    return null;
+  };
+
+export const savelogin = (_username: String, _password: String): ThunkAction =>
+  (dispatch: Dispatch, getState: GetState) => {
+    if (!isLoggin(getState())) {
+      dispatch({ type: AUTH_SAVE_LOGIN, username: _username, password: _password });
     }
 
     return null;

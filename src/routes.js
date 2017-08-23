@@ -11,6 +11,7 @@ import requireAuthentication from './containers/Auth';
 
 export default [
   {
+    name: 'home',
     path: '/',
     exact: true,
     component: requireAuthentication(HomePage), // Add your route here
@@ -19,6 +20,7 @@ export default [
     ]),
   },
   {
+    name: 'user info',
     path: '/UserInfo/:id',
     component: requireAuthentication(UserInfoPage),
     loadData: (dispatch: Dispatch, params: Object) => Promise.all([
@@ -26,7 +28,7 @@ export default [
     ]),
   },
   {
+    name: 'Error 404',
     path: '*',
-    component: NotFoundPage,
-  },
-];
+    component: requireAuthentication(NotFoundPage),
+  }];

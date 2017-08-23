@@ -9,7 +9,6 @@ import Helmet from 'react-helmet';
 
 import * as action from './action';
 import type { UserInfo as UserInfoType, Dispatch, Reducer } from '../../types';
-import UserCard from '../../components/UserCard';
 import styles from './styles.scss';
 
 type Props = {
@@ -39,14 +38,14 @@ export class UserInfo extends PureComponent {
     const userInfoById = userInfo[params.id];
 
     if (!userInfoById || userInfoById.readyStatus === action.USER_REQUESTING) {
-      return <p>Loading...</p>;
+      return <p>Que onda se paso...</p>;
     }
 
     if (userInfoById.readyStatus === action.USER_FAILURE) {
       return <p>Oops, Failed to load info!</p>;
     }
-
-    return <UserCard info={userInfoById.info} />;
+    console.log(userInfoById.info);
+    return <div>HOLA</div>;
   }
 
   render() {
