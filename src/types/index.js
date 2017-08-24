@@ -8,6 +8,7 @@ import actionUserInfo from '../containers/UserInfo/action';
 
 export type Auth = {
   signedIn: boolean,
+  isopen: boolean,
   type: string,
   credentials: Object,
   userInfo: {
@@ -19,7 +20,6 @@ export type Auth = {
 export type Login = {
   readyStatus: string,
   err: any,
-  isopen: boolean,
   typeopen: string,
 };
 
@@ -70,6 +70,7 @@ export type Action =
 { type: actionAuth.AUTH_LOGOUT } |
 { type: actionAuth.AUTH_SAVE_LOGIN, username: string, password: string } |
 { type: actionAuth.AUTH_LOGIN } |
+{ type: actionAuth.AUTH_ISOPEN } |
 { type: actionLogin.LOGIN_REQUESTING } |
 { type: actionLogin.LOGIN_SUCCESS, data: Array<Object> } |
 { type: actionLogin.LOGIN_FAILURE, err: any } |

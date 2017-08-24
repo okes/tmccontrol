@@ -7,12 +7,13 @@ import type { Element } from 'react';
 import type { Connector } from 'react-redux';
 
 import * as actionLogin from '../Login/action';
-import type { Auth as AuthType, Login as LoginType, Dispatch, Reducer } from '../../types';
+import * as actionAuth from './action';
+import type { Auth as AuthType, Dispatch, Reducer } from '../../types';
 
 type Props = {
   auth: AuthType,
-  login: LoginType,
   showLogin: () => void,
+  authLogin: () => void,
 };
 
 export default function (Component) {
@@ -22,23 +23,35 @@ export default function (Component) {
 
     static defaultProps: {
       auth: {},
-      login: {},
       showLogin: () => {},
+      authLogin: () => {},
     };
 
     componentDidMount() { }
 
+    componentWillMount() {
+      this.chekCheka();
+    }
+
+    componentWillReceiveProps() {
+      this.chekCheka();
+    }
+
+    chekCheka() {
+      const { auth, showLogin, authLogin } = this.props;
+      if (auth.signedIn !== true && auth.isopen !== true) {
+        showLogin();
+        authLogin();
+      }
+    }
+
     renderUserList = (): Element<any> => {
-      const { login, auth, showLogin } = this.props;
+      const { auth } = this.props;
 
       if (auth.signedIn === true) {
         return (
           <Component {...this.props} />
         );
-      }
-
-      if (login.isopen !== true) {
-        showLogin();
       }
 
       return null;
@@ -53,8 +66,9 @@ export default function (Component) {
   }
 
   const connector: Connector<{}, Props> = connect(
-    ({ login, auth }: Reducer) => ({ login, auth }),
+    ({ auth }: Reducer) => ({ auth }),
     (dispatch: Dispatch) => ({
+      authLogin: () => dispatch(actionAuth.openLogin()),
       showLogin: () => dispatch(actionLogin.openLogin(actionLogin.TYPE_OPEN_LOGIN)),
     }),
   );

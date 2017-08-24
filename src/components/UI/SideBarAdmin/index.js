@@ -37,8 +37,8 @@ export class SideBarAdmin extends PureComponent {
     const arrlist = {
       items: [
         {
-          name: 'Dashboard',
-          url: '/UserInfo/1',
+          name: 'INICIO',
+          url: '/',
           icon: 'icon-speedometer',
           badge: {
             variant: 'info',
@@ -46,75 +46,45 @@ export class SideBarAdmin extends PureComponent {
           },
         },
         {
-          title: true,
-          name: 'UI elements',
-          wrapper: {
-            element: 'span',
-            attributes: {},
-          },
-          class: '',
-        },
-        {
           divider: true,
         },
         {
-          title: true,
-          name: 'Extras',
-        },
-        {
-          name: 'Components',
+          name: 'FINANZAS',
           url: '/components',
           icon: 'icon-puzzle',
           children: [
             {
-              name: 'Buttons',
+              name: 'Agregar Ganancia',
               url: '/components/buttons',
               icon: 'icon-puzzle',
             },
             {
-              name: 'Social Buttons',
+              name: 'Agregar Gasto',
               url: '/components/social-buttons',
               icon: 'icon-puzzle',
             },
             {
-              name: 'Cards',
+              name: 'Historial',
               url: '/components/cards',
               icon: 'icon-puzzle',
             },
             {
-              name: 'Forms',
+              name: 'Cuentas',
               url: '/components/forms',
-              icon: 'icon-puzzle',
-            },
-            {
-              name: 'Modals',
-              url: '/components/modals',
-              icon: 'icon-puzzle',
-            },
-            {
-              name: 'Switches',
-              url: '/components/switches',
-              icon: 'icon-puzzle',
-            },
-            {
-              name: 'Tables',
-              url: '/components/tables',
-              icon: 'icon-puzzle',
-            },
-            {
-              name: 'Tabs',
-              url: '/components/tabs',
               icon: 'icon-puzzle',
             },
           ],
         },
         {
-          name: 'Icons',
+          divider: true,
+        },
+        {
+          name: 'MERCADERIA',
           url: '/icons',
           icon: 'icon-star',
           children: [
             {
-              name: 'Font Awesome',
+              name: 'Agregar Mercaderia',
               url: '/icons/font-awesome',
               icon: 'icon-star',
               badge: {
@@ -123,49 +93,55 @@ export class SideBarAdmin extends PureComponent {
               },
             },
             {
-              name: 'Simple Line Icons',
+              name: 'Quitar Mercaderia',
+              url: '/icons/simple-line-icons',
+              icon: 'icon-star',
+            },
+            {
+              name: 'Historial',
+              url: '/icons/simple-line-icons',
+              icon: 'icon-star',
+            },
+            {
+              name: 'Mercaderia',
               url: '/icons/simple-line-icons',
               icon: 'icon-star',
             },
           ],
         },
         {
-          name: 'Widgets',
-          url: '/widgets',
-          icon: 'icon-calculator',
-          badge: {
-            variant: 'info',
-            text: 'NEW',
-          },
+          divider: true,
         },
         {
-          name: 'Charts',
-          url: '/charts',
-          icon: 'icon-pie-chart',
-        },
-        {
-          name: 'Pages',
+          name: 'RRHH',
           url: '/pages',
           icon: 'icon-star',
           children: [
             {
-              name: 'Login',
-              url: '/login',
+              name: 'Pagar',
+              url: '/pages',
               icon: 'icon-star',
+              children: [
+                {
+                  name: 'Pagar Suelo',
+                  url: '/login',
+                  icon: 'icon-star',
+                },
+                {
+                  name: 'Pagar Adelanto',
+                  url: '/register',
+                  icon: 'icon-star',
+                },
+                {
+                  name: 'Pagar Extra',
+                  url: '/register',
+                  icon: 'icon-star',
+                },
+              ],
             },
             {
-              name: 'Register',
+              name: 'Personal',
               url: '/register',
-              icon: 'icon-star',
-            },
-            {
-              name: 'Error 404',
-              url: '/404',
-              icon: 'icon-star',
-            },
-            {
-              name: 'Error 500',
-              url: '/500',
               icon: 'icon-star',
             },
           ],

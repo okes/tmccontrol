@@ -47,12 +47,10 @@ export class WrapLogin extends PureComponent {
   renderPassReset = (): Element<any> => <FormLoginPassReset />;
 
   renderUserList = (): Element<any> => {
-    const { login } = this.props;
     const { cognitostate } = this.state;
 
-    console.log(login.typeopen);
-
     switch (cognitostate) {
+      case CognitoState.LOGGED_IN:
       case CognitoState.AUTHENTICATED:
       case CognitoState.LOGGING_IN:
         return <ReactLoading type="spin" delay={0} color="#2592db" height={50} width={50} />;

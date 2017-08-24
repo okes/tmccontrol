@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react';
 import type { Element } from 'react';
 import { connect } from 'react-redux';
 import type { Connector } from 'react-redux';
-
+import ReactLoading from 'react-loading';
 import { Row, Col, CardGroup, Card, CardBlock, Button, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 import type { Cognito as CognitoType, Reducer, Dispatch } from '../../../types';
@@ -18,11 +18,14 @@ type Props = {
   cognito: CognitoType,
   email: String,
   username: String,
+  initnow: Boolean,
+  password: String,
   error: String,
   authSaveLogin: () => void,
   clearCache: () => void,
   onSubmit: () => void,
   showForgot: () => void,
+  authLogin: () => void,
 };
 
 // Export this for unit testing more easily
@@ -33,27 +36,28 @@ export class AuthFormLogin extends PureComponent {
     cognito: {},
     email: '',
     username: '',
+    password: '',
+    initnow: false,
     error: '',
     authSaveLogin: () => {},
     clearCache: () => {},
     onSubmit: () => {},
     showForgot: () => {},
+    authLogin: () => {},
   };
 
   state = {
     username: this.props.username,
     email: this.props.email,
     error: this.props.error,
-    password: '',
+    password: this.props.password,
+    initnow: this.props.initnow,
   }
 
-  componentWillMount() {
-    if (localStorage.getItem('tmcdataname')) {
-      const lsUser = localStorage.getItem('tmcdataname');
-      const lsPass = localStorage.getItem('tmcdatapass');
-      if (this.props.username === lsUser && lsUser.length > 3) {
-        this.setState({ password: lsPass });
-      }
+  componentDidMount() {
+    const { props, checkLoginGO } = this;
+    if (props.username !== '' && props.password !== '') {
+      checkLoginGO(props.username, props.password);
     }
   }
 
@@ -81,12 +85,27 @@ export class AuthFormLogin extends PureComponent {
     const { clearCache } = this.props;
     clearCache();
   }
-  // Handler Click Login
-  handlerClickLogin = () => {
-    const { onSubmit, cognito, authSaveLogin } = this.props;
-    const { username, password } = this.state;
+
+  checkLoginGO = (username: String, password: String) => {
+    const { onSubmit, cognito, authLogin, authSaveLogin } = this.props;
+    const { setState } = this;
     authSaveLogin(username, password);
-    onSubmit(username, password, cognito.userPool, cognito.config);
+    onSubmit(username, password, cognito.userPool, cognito.config)
+      .then(() => {
+        authLogin();
+      })
+      .catch((error) => {
+        setState({ initnow: false });
+        console.log(error);
+        console.log('error de login');
+      });
+  };
+
+  // Handler Click Login 
+  handlerClickLogin = () => {
+    const { checkLoginGO } = this;
+    const { username, password } = this.state;
+    checkLoginGO(username, password);
   };
 
   handlerClickForgtoPass = () => {
@@ -117,6 +136,10 @@ export class AuthFormLogin extends PureComponent {
   renderUserList = (): Element<any> => {
     const { handlerClickLogin, handleChangeUsername, handleChangePassword, handlerClickForgtoPass, getSubTitle } = this; // eslint-disable-line max-len
     const { state } = this;
+
+    if (state.initnow) {
+      return <ReactLoading type="spin" delay={0} color="#2592db" height={50} width={50} />;
+    }
 
     return (
       <Col md="8">
@@ -168,8 +191,22 @@ const mapStateToProps = ({ cognito }: Reducer) => {
   } else if (cognito.userName) {
     username = cognito.cache.userName;
   }
+
+  let password = '';
+  let initnow = false;
+  if (localStorage.getItem('tmcdataname')) {
+    const lsUser = localStorage.getItem('tmcdataname');
+    const lsPass = localStorage.getItem('tmcdatapass');
+    if (username === lsUser && lsUser.length > 1) {
+      password = lsPass;
+      initnow = true;
+    }
+  }
+
   return {
     username,
+    password,
+    initnow,
     cognito,
     email: cognito.cache.email,
     error: cognito.error,
@@ -183,6 +220,7 @@ const connector: Connector<{}, Props> = connect(
     onSubmit: (username: string, _pass: string, userPool: Object, config: Object) => authenticate(username, _pass, userPool, config, dispatch), // eslint-disable-line max-len
     clearCache: () => dispatch(actionCognito.clearCache()),
     showForgot: () => dispatch(actionLogin.openLogin(actionLogin.TYPE_OPEN_RESET_PASSWORD)),
+    authLogin: () => dispatch(actionAuth.login()),
   }),
 );
 

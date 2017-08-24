@@ -7,10 +7,8 @@ import { connect } from 'react-redux';
 import type { Connector } from 'react-redux';
 import ReactLoading from 'react-loading';
 
-import * as actionAuth from '../Auth/action';
 import * as actionLogin from './action';
 import actionCognito from '../../utils/cognito/actions';
-import CognitoState from '../../utils/cognito/states';
 import type { Login as LoginType, Auth as AuthType, Dispatch, Reducer } from '../../types';
 import appSecrets from '../../utils/appSecrets';
 import LoginCont from '../../components/WrapLogin';
@@ -20,8 +18,6 @@ type Props = {
   auth: AuthType,
   cognito: Object,
   setupCognito: () => void,
-  authLogin: () => void,
-  closeLogin: () => void,
 };
 
 // Export this for unit testing more easily
@@ -31,14 +27,11 @@ export class Login extends PureComponent {
   static defaultProps: {
     login: {
       readyStatus: actionLogin.LOGIN_INVALID,
-      isopen: false,
       typeopen: actionLogin.TYPE_OPEN_LOGIN,
     },
     auth: {},
     cognito: {},
     setupCognito: () => {},
-    authLogin: () => {},
-    closeLogin: () => {},
   };
 
   componentDidMount() {
@@ -47,7 +40,7 @@ export class Login extends PureComponent {
   }
 
   renderUserList = (): Element<any> => {
-    const { login, auth, cognito, authLogin, closeLogin } = this.props;
+    const { login, auth, cognito } = this.props;
 
     let el = '';
 
@@ -55,16 +48,12 @@ export class Login extends PureComponent {
       el = document.querySelector('#divapp');
     }
 
-    if (login.isopen === false) {
+    if (auth.isopen === false) {
       if (el !== null && el !== '') {
         el.classList.remove('d-none');
       }
 
       return null;
-    }
-
-    if (auth.signedIn === true) {
-      console.log('login oka');
     }
 
     if (el !== null && el !== '') {
@@ -73,12 +62,6 @@ export class Login extends PureComponent {
 
     if (cognito.config.region === null && cognito.config.userPool === null) {
       return <ReactLoading type="spin" delay={0} color="#2592db" height={50} width={50} />;
-    }
-
-    if (login.typeopen === actionLogin.TYPE_OPEN_LOGIN && cognito.state === CognitoState.LOGGED_IN) { // eslint-disable-line max-len
-      closeLogin();
-      authLogin();
-      return null;
     }
 
     switch (login.typeopen) {
@@ -106,8 +89,6 @@ const connector: Connector<{}, Props> = connect(
   ({ login, auth, cognito }: Reducer) => ({ login, auth, cognito }),
   (dispatch: Dispatch) => ({
     setupCognito: (_config: Object) => dispatch(actionCognito.configure(_config)),
-    authLogin: () => dispatch(actionAuth.login()),
-    closeLogin: () => dispatch(actionLogin.closeLogin()),
   }),
 );
 
