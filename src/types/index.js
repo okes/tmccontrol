@@ -5,6 +5,7 @@ import actionAuth from '../containers/Auth/action';
 import actionLogin from '../containers/Login/action';
 import actionHome from '../containers/Home/action';
 import actionUserInfo from '../containers/UserInfo/action';
+import actionUtilFetch from '../utils/fetch/action';
 
 export type Auth = {
   signedIn: boolean,
@@ -15,6 +16,20 @@ export type Auth = {
     username: string,
     password: string
   }
+};
+
+export type UtilFetch = {
+  finanzas_gastos: Array,
+  finanzas_ganancias: Array,
+  finanzas_porvencer: Array,
+  finanzas_porvencerok: Array,
+  finanzas_cuotas: Array,
+  cuentas: Array,
+  mercaderia: Array,
+  mercaderiacombo: Array,
+  mercaderiacomboquitar: Array,
+  personal: Array,
+  data: any,
 };
 
 export type Login = {
@@ -59,6 +74,7 @@ export type Cognito = {
 
 export type Reducer = {
   auth: Auth,
+  utilfetch: UtilFetch,
   cognito: Cognito,
   login: Login,
   home: Home,
@@ -67,6 +83,8 @@ export type Reducer = {
 };
 
 export type Action =
+{ type: actionUtilFetch.FETCH_SUCCESS, data: Array, method: string } |
+{ type: actionUtilFetch.FETCH_ERROR, error: string } |
 { type: actionAuth.AUTH_LOGOUT } |
 { type: actionAuth.AUTH_SAVE_LOGIN, username: string, password: string } |
 { type: actionAuth.AUTH_LOGIN } |
