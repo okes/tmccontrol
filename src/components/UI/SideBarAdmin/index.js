@@ -6,13 +6,18 @@ import type { Element } from 'react';
 import { connect } from 'react-redux';
 import type { Connector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { Badge, Nav, NavItem } from 'reactstrap';
+import { Badge, Nav, NavItem, Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import classNames from 'classnames';
 
-import type { Auth as AuthType, Reducer } from '../../../types';
+import type { Auth as AuthType, Local as LocalType, Reducer, Dispatch } from '../../../types';
+import { setLocal } from '../../../utils/local/action';
+import * as actionFetch from '../../../utils/fetch/action';
 
 type Props = {
   auth: AuthType,
+  local: LocalType,
+  setNewLocal: () => void,
+  goDeleteData: () => void,
 };
 
 // Export this for unit testing more easily
@@ -21,8 +26,16 @@ export class SideBarAdmin extends PureComponent {
 
   static defaultProps: {
     auth: {},
+    local: {},
     router: {},
+    setNewLocal: () => {},
+    goDeleteData: () => {},
   };
+
+  state = {
+    modallocal: false,
+    modallocalitem: {},
+  }
 
   componentDidMount() { }
 
@@ -33,6 +46,8 @@ export class SideBarAdmin extends PureComponent {
 
   renderUserList = (): Element<any> => {
     const { handleClick, props } = this;
+    const { local, setNewLocal, goDeleteData } = this.props;
+    const { modallocal } = this.state;
 
     const arrlist = {
       items: [
@@ -40,37 +55,32 @@ export class SideBarAdmin extends PureComponent {
           name: 'INICIO',
           url: '/',
           icon: 'icon-speedometer',
-          badge: {
-            variant: 'info',
-            text: 'NEW',
-          },
         },
         {
           divider: true,
         },
         {
           name: 'FINANZAS',
-          url: '/components',
-          icon: 'icon-puzzle',
+          icon: 'fa fa-line-chart',
           children: [
             {
               name: 'Agregar Ganancia',
-              url: '/components/buttons',
+              url: '/finanzas/agregar-ganancia',
               icon: 'icon-puzzle',
             },
             {
               name: 'Agregar Gasto',
-              url: '/components/social-buttons',
+              url: '/finanzas/agregar-gasto',
               icon: 'icon-puzzle',
             },
             {
               name: 'Historial',
-              url: '/components/cards',
+              url: '/finanzas/historial',
               icon: 'icon-puzzle',
             },
             {
               name: 'Cuentas',
-              url: '/components/forms',
+              url: '/finanzas/cuentas',
               icon: 'icon-puzzle',
             },
           ],
@@ -80,31 +90,26 @@ export class SideBarAdmin extends PureComponent {
         },
         {
           name: 'MERCADERIA',
-          url: '/icons',
           icon: 'icon-star',
           children: [
             {
               name: 'Agregar Mercaderia',
-              url: '/icons/font-awesome',
+              url: '/mercaderia/agregar-mercaderia',
               icon: 'icon-star',
-              badge: {
-                variant: 'secondary',
-                text: '4.7',
-              },
             },
             {
               name: 'Quitar Mercaderia',
-              url: '/icons/simple-line-icons',
+              url: '/mercaderia/quitar-mercaderia',
               icon: 'icon-star',
             },
             {
               name: 'Historial',
-              url: '/icons/simple-line-icons',
+              url: '/mercaderia/historial',
               icon: 'icon-star',
             },
             {
               name: 'Mercaderia',
-              url: '/icons/simple-line-icons',
+              url: '/mercaderia/lista',
               icon: 'icon-star',
             },
           ],
@@ -114,34 +119,32 @@ export class SideBarAdmin extends PureComponent {
         },
         {
           name: 'RRHH',
-          url: '/pages',
           icon: 'icon-star',
           children: [
             {
               name: 'Pagar',
-              url: '/pages',
               icon: 'icon-star',
               children: [
                 {
                   name: 'Pagar Suelo',
-                  url: '/login',
+                  url: '/rrhh/personal/pagar-sueldo',
                   icon: 'icon-star',
                 },
                 {
                   name: 'Pagar Adelanto',
-                  url: '/register',
+                  url: '/rrhh/personal/pagar-adelanto',
                   icon: 'icon-star',
                 },
                 {
                   name: 'Pagar Extra',
-                  url: '/register',
+                  url: '/rrhh/personal/pagar-extra',
                   icon: 'icon-star',
                 },
               ],
             },
             {
               name: 'Personal',
-              url: '/register',
+              url: '/rrhh/personal/lista',
               icon: 'icon-star',
             },
           ],
@@ -209,6 +212,48 @@ export class SideBarAdmin extends PureComponent {
 
     const navList = items => items.map((item, index) => getNavLink(item, index));
 
+    const toggleLocalSelect = (forceclose) => {
+      const { sendingload } = this.state;
+      if (!sendingload || forceclose) {
+        const objset = {
+          modallocal: !this.state.modallocal,
+          modallocalitem: {},
+        };
+        if (forceclose) {
+          objset.sendingload = false;
+        }
+        this.setState(objset);
+      }
+    };
+
+    const handleClickLocalSelect = (_item) => {
+      setNewLocal(_item.id);
+      goDeleteData();
+      toggleLocalSelect(true);
+    };
+
+    const _localname = local.list[local.id].name;
+
+    const getTableList = (item, i) => {
+      let classbtn = 'grid-bg-itemone';
+      if (i % 2 === 1) {
+        classbtn = 'grid-bg-itemtwo';
+      }
+      classbtn += ' mb-2';
+
+      let _disabled = false;
+
+      if (item.id === local.id) {
+        _disabled = true;
+      }
+
+      return (
+        <div key={i}>
+          <Button className={classbtn} onClick={() => handleClickLocalSelect(item)} disabled={_disabled} block>{item.name}</Button>{' '}
+        </div>
+      );
+    };
+
     return (
       <div className="sidebar">
         <nav className="sidebar-nav">
@@ -216,6 +261,17 @@ export class SideBarAdmin extends PureComponent {
             {navList(arrlist.items)}
           </Nav>
         </nav>
+        <div>
+          <a className="nav-link pl-4" onClick={toggleLocalSelect} role="button" tabIndex={0}>
+            <i className="icon-puzzle mr-2" />{_localname}
+          </a>
+        </div>
+        <Modal isOpen={modallocal} toggle={toggleLocalSelect} className={'modal-sm'}>
+          <ModalHeader toggle={toggleLocalSelect}>{'Locales'}</ModalHeader>
+          <ModalBody>
+            {local.list.map((item, i) => getTableList(item, i))}
+          </ModalBody>
+        </Modal>
       </div>
     );
   }
@@ -230,8 +286,11 @@ export class SideBarAdmin extends PureComponent {
 }
 
 const connector: Connector<{}, Props> = connect(
-  ({ auth, router }: Reducer) => ({ auth, router }),
-  () => ({}),
+  ({ auth, router, local }: Reducer) => ({ auth, router, local }),
+  (dispatch: Dispatch) => ({
+    goDeleteData: () => dispatch(actionFetch.resetData()),
+    setNewLocal: (_newid: any) => dispatch(setLocal(_newid)),
+  }),
 );
 
 export default connector(SideBarAdmin);

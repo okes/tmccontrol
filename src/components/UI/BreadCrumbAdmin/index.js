@@ -35,12 +35,12 @@ export class BreadCrumbAdmin extends PureComponent {
       if (routeName) {
         return (routeName.exact ?
           (
-            <BreadcrumbItem key={idx} active>{routeName.name}</BreadcrumbItem>
+            <BreadcrumbItem key={idx} active>{routeName.extra.name}</BreadcrumbItem>
           ) :
           (
             <BreadcrumbItem key={idx}>
               <Link to={routeName.path || ''}>
-                {routeName.name}
+                {routeName.extra.name}
               </Link>
             </BreadcrumbItem>
           )

@@ -6,11 +6,14 @@ import type { Element } from 'react';
 import { connect } from 'react-redux';
 import type { Connector } from 'react-redux';
 import { Container, Row } from 'reactstrap';
+import Helmet from 'react-helmet';
 import ReactLoading from 'react-loading';
 
 import * as actionLogin from '../../containers/Login/action';
+import * as actionFetch from '../../utils/fetch/action';
+import * as actionAuth from '../../containers/Auth/action';
 import CognitoState from '../../utils/cognito/states';
-import type { Login as LoginType, Reducer } from '../../types';
+import type { Login as LoginType, Reducer, Dispatch } from '../../types';
 import FormLogin from './AuthFormLogin';
 import FormLoginNewPassRequired from './AuthFormLoginNewPassRequired';
 import FormLoginEmailVerification from './AuthFormLoginEmailVerification';
@@ -20,6 +23,8 @@ import FormLoginPassReset from './AuthFormLoginPassReset';
 type Props = {
   login: LoginType,
   cognitostate: string,
+  authLogin: () => void,
+  loadAllData: () => void,
 };
 
 // Export this for unit testing more easily
@@ -29,6 +34,8 @@ export class WrapLogin extends PureComponent {
   static defaultProps: {
     login: {},
     cognitostate: '',
+    authLogin: () => {},
+    loadAllData: () => {},
   };
 
   state = {
@@ -41,6 +48,21 @@ export class WrapLogin extends PureComponent {
     const { cognitostate } = this.state;
     if (cognitostate !== nextPros.cognitostate) {
       this.setState({ cognitostate: nextPros.cognitostate });
+    }
+  }
+
+  componentDidUpdate() {
+    this.checkLoadDataInit();
+  }
+
+  checkLoadDataInit = () => {
+    const { loadAllData, authLogin } = this.props;
+    const { cognitostate } = this.state;
+    if (cognitostate === 'LOGGED_IN') {
+      loadAllData()
+        .then(() => {
+          authLogin();
+        });
     }
   }
 
@@ -80,6 +102,7 @@ export class WrapLogin extends PureComponent {
     return (
       /* eslint-disable max-len */
       <div className="app flex-row align-items-center">
+        <Helmet title="Login" />
         <Container>
           <Row className="justify-content-center">
             {(actionLogin.TYPE_OPEN_LOGIN === login.typeopen) ? renderUserList() : renderPassReset()}
@@ -93,7 +116,10 @@ export class WrapLogin extends PureComponent {
 
 const connector: Connector<{}, Props> = connect(
   ({ login, cognito }: Reducer) => ({ login, cognitostate: cognito.state }),
-  () => ({ }),
+  (dispatch: Dispatch) => ({
+    loadAllData: () => dispatch(actionFetch.goGetCuentas()),
+    authLogin: () => dispatch(actionAuth.login()),
+  }),
 );
 
 export default connector(WrapLogin);

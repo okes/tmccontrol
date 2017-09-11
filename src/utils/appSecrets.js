@@ -30,6 +30,7 @@ const appSecrets = {
       getfinanzas: 'finanzas/valores',
       rrhhpersonalget: 'rrhh/personal',
       rrhhpersonaladd: 'rrhh/personal/add',
+      rrhhpersonaldelete: 'rrhh/personal/delete',
       rrhhpersonalcomboadd: 'rrhh/personal/combo/add',
     },
   },

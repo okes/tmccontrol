@@ -2,7 +2,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
-import Helmet from 'react-helmet';
 import _ from 'lodash';
 
 import 'font-awesome/css/font-awesome.min.css';
@@ -17,6 +16,7 @@ import SideBarPage from '../../components/UI/SideBarAdmin';
 import BreadCrumbPage from '../../components/UI/BreadCrumbAdmin';
 import FooterPage from '../../components/UI/FooterAdmin';
 import LoginPage from '../Login';
+import NotificationPage from '../../components/UI/NotificationAdmin';
 
 export default () => {
   // Use it when sub routes are added to any route it'll work
@@ -27,7 +27,7 @@ export default () => {
       path={route.path}
       render={props => (
         // Pass the sub-routes down to keep nesting
-        <route.component {...props} routes={route.routes} />
+        <route.component {...props} routes={route.routes || null} extra={route.extra || null} />
       )}
     />
   );
@@ -36,7 +36,6 @@ export default () => {
     <div>
       <LoginPage />
       <div id="divapp" className="app d-none">
-        <Helmet title="Home" />
         <HeaderPage />
         <div className="app-body">
           <SideBarPage />
@@ -48,6 +47,7 @@ export default () => {
               </Switch>
             </Container>
           </main>
+          <NotificationPage />
         </div>
         <FooterPage />
       </div>

@@ -6,6 +6,8 @@ import actionLogin from '../containers/Login/action';
 import actionHome from '../containers/Home/action';
 import actionUserInfo from '../containers/UserInfo/action';
 import actionUtilFetch from '../utils/fetch/action';
+import actionLocal from '../utils/local/action';
+import actionNotification from '../utils/notification/action';
 
 export type Auth = {
   signedIn: boolean,
@@ -19,29 +21,32 @@ export type Auth = {
 };
 
 export type UtilFetch = {
-  finanzas_gastos: Array,
-  finanzas_ganancias: Array,
-  finanzas_porvencer: Array,
-  finanzas_porvencerok: Array,
-  finanzas_cuotas: Array,
-  cuentas: Array,
-  mercaderia: Array,
-  mercaderiacombo: Array,
-  mercaderiacomboquitar: Array,
-  personal: Array,
-  data: any,
+  finanzas_gastos: Object,
+  finanzas_ganancias: Object,
+  finanzas_porvencer: Object,
+  finanzas_porvencerok: Object,
+  finanzas_cuotas: Object,
+  cuentas: Object,
+  mercaderia: Object,
+  mercaderiacombo: Object,
+  mercaderiacomboquitar: Object,
+  personal: Object,
+  data: Object,
+};
+
+export type Local = {
+  id: number,
+  list: Array,
+};
+
+export type Notification = {
+  alertone: Object,
 };
 
 export type Login = {
   readyStatus: string,
   err: any,
   typeopen: string,
-};
-
-export type Home = {
-  readyStatus: string,
-  err: any,
-  list: Array<Object>,
 };
 
 export type UserInfo = {
@@ -75,16 +80,24 @@ export type Cognito = {
 export type Reducer = {
   auth: Auth,
   utilfetch: UtilFetch,
+  local: Local,
   cognito: Cognito,
   login: Login,
-  home: Home,
   userInfo: UserInfo,
+  notification: Notification,
   router: any,
 };
 
 export type Action =
+{ type: actionNotification.SEND_NOTIFICATION, param: any } |
+{ type: actionLocal.ADDLISTLOCAL, list: Array } |
+{ type: actionLocal.SETLOCAL, id: number } |
+{ type: actionUtilFetch.FETCH_DATA_DELETE, name: string } |
+{ type: actionUtilFetch.FETCH_DATA, param: Object, name: string, danger: boolean } |
 { type: actionUtilFetch.FETCH_SUCCESS, data: Array, method: string } |
+{ type: actionUtilFetch.FETCH_SUCCESS_TC, data: Array, method: string, timecreate: any } |
 { type: actionUtilFetch.FETCH_ERROR, error: string } |
+{ type: actionUtilFetch.FETCH_DATA_RESET } |
 { type: actionAuth.AUTH_LOGOUT } |
 { type: actionAuth.AUTH_SAVE_LOGIN, username: string, password: string } |
 { type: actionAuth.AUTH_LOGIN } |
@@ -94,9 +107,6 @@ export type Action =
 { type: actionLogin.LOGIN_FAILURE, err: any } |
 { type: actionLogin.LOGIN_OPEN, newtype: string } |
 { type: actionLogin.LOGIN_CLOSE } |
-{ type: actionHome.USERS_REQUESTING } |
-{ type: actionHome.USERS_SUCCESS, data: Array<Object> } |
-{ type: actionHome.USERS_FAILURE, err: any } |
 { type: actionUserInfo.USER_REQUESTING, userId: string } |
 { type: actionUserInfo.USER_SUCCESS, userId: string, data: Object } |
 { type: actionUserInfo.USER_FAILURE, userId: string, err: any };

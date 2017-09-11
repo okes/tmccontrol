@@ -11,7 +11,7 @@
     display: inline-block;
     width: $navbar-brand-width;
     height: $navbar-height;
-    padding: $navbar-padding-y $navbar-padding-x;
+    padding: 0.5rem $navbar-padding-x;
     margin-right: 0;
     @include borders($navbar-brand-border);
   }

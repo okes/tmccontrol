@@ -38,7 +38,7 @@ export class AuthFormLoginEmailVerification extends PureComponent {
   componentDidMount() { }
 
   componentWillReceiveProps(nextProps) {
-    const { error, user } = this.props;
+    const { error, user } = this.state;
     const newobj = { };
     let sendok = false;
 
@@ -90,7 +90,7 @@ export class AuthFormLoginEmailVerification extends PureComponent {
     const { state } = this;
 
     return (
-      <Col md="8">
+      <Col md="8" className="animated fadeIn">
         <CardGroup className="mb-0">
           <Card className="p-4">
             <CardBlock className="card-body">

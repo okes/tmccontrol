@@ -11,7 +11,6 @@ import { Row, Col, CardGroup, Card, CardBlock, Button, Input, InputGroup, InputG
 import type { Cognito as CognitoType, Reducer, Dispatch } from '../../../types';
 import * as actionAuth from '../../../containers/Auth/action';
 import * as actionLogin from '../../../containers/Login/action';
-import * as actionFetch from '../../../utils/fetch/action';
 import { authenticate } from '../../../utils/cognito/auth';
 import actionCognito from '../../../utils/cognito/actions';
 
@@ -26,8 +25,6 @@ type Props = {
   clearCache: () => void,
   onSubmit: () => void,
   showForgot: () => void,
-  authLogin: () => void,
-  loadAllData: () => void,
 };
 
 // Export this for unit testing more easily
@@ -45,8 +42,6 @@ export class AuthFormLogin extends PureComponent {
     clearCache: () => {},
     onSubmit: () => {},
     showForgot: () => {},
-    authLogin: () => {},
-    loadAllData: () => {},
   };
 
   state = {
@@ -65,7 +60,7 @@ export class AuthFormLogin extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { error, username } = this.props;
+    const { error, username } = this.state;
     const newobj = { };
     let sendok = false;
 
@@ -90,17 +85,12 @@ export class AuthFormLogin extends PureComponent {
   }
 
   checkLoginGO = (username: String, password: String) => {
-    const { onSubmit, cognito, authLogin, authSaveLogin, loadAllData } = this.props;
+    const { onSubmit, cognito, authSaveLogin } = this.props;
     const { setState } = this;
     authSaveLogin(username, password);
     onSubmit(username, password, cognito.userPool, cognito.config)
       .then(() => {
         console.log('login ok!');
-        loadAllData()
-          .then(() => {
-            console.log('wuashoooo');
-            authLogin();
-          });
       })
       .catch((error) => {
         setState({ initnow: false });
@@ -150,7 +140,7 @@ export class AuthFormLogin extends PureComponent {
     }
 
     return (
-      <Col md="8">
+      <Col md="8" className="animated fadeIn">
         <CardGroup className="mb-0">
           <Card className="p-4">
             <CardBlock className="card-body">
@@ -228,8 +218,6 @@ const connector: Connector<{}, Props> = connect(
     onSubmit: (username: string, _pass: string, userPool: Object, config: Object) => authenticate(username, _pass, userPool, config, dispatch), // eslint-disable-line max-len
     clearCache: () => dispatch(actionCognito.clearCache()),
     showForgot: () => dispatch(actionLogin.openLogin(actionLogin.TYPE_OPEN_RESET_PASSWORD)),
-    loadAllData: () => dispatch(actionFetch.loadAllData()),
-    authLogin: () => dispatch(actionAuth.login()),
   }),
 );
 

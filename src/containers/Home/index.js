@@ -3,16 +3,18 @@
 
 import React, { PureComponent } from 'react';
 import type { Element } from 'react';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import type { Connector } from 'react-redux';
 
-import * as action from './action';
-import type { Home as HomeType, Auth as AuthType, Dispatch, Reducer } from '../../types';
+import type { Cognito as CognitoType, Reducer } from '../../types';
+
+import BusinessDash from '../../components/Business/Dashboard';
+import MercaderiaDash from '../../components/Mercaderia/Dashboard';
 
 type Props = {
-  home: HomeType,
-  auth: AuthType,
-  fetchUsersIfNeeded: () => void,
+  cognito: CognitoType,
+  extra: Object,
 };
 
 // Export this for unit testing more easily
@@ -20,60 +22,37 @@ export class Home extends PureComponent {
   props: Props;
 
   static defaultProps: {
-    home: {
-      readyStatus: 'USERS_INVALID',
-      list: null,
-    },
-    fetchUsersIfNeeded: () => {},
-    auth: {},
+    cognito: {},
+    extra: {},
   };
 
+  state = {
+    initnow: false,
+  }
+
   componentDidMount() {
-    this.props.fetchUsersIfNeeded();
+    if (this.props.cognito.state !== 'LOGGED_IN') {
+      console.log(this.props.cognito);
+    }
+  }
+
+  componentWillMount() {
+    this.setState({ initnow: true });
   }
 
   renderUserList = (): Element<any> => {
-    const { home, auth } = this.props;
+    const { initnow } = this.state;
+    const { extra } = this.props;
 
-    if (!home.readyStatus || home.readyStatus === action.USERS_INVALID ||
-      home.readyStatus === action.USERS_REQUESTING) {
-      return <p>cargando...</p>;
-    }
-
-    if (home.readyStatus === action.USERS_FAILURE) {
-      return <p>Oops, Failed to load list!</p>;
-    }
-
-    if (auth.signedIn === true) {
-      console.log('hi');
+    if (!initnow) {
+      return null;
     }
 
     return (
-      <div>nopo
-        a<br />sd
-        as<br />ds
-        di<br />sabl<br />edsa
-        de<br />fau<br />ltd
-        sa<br />dsad
-        asdd<br />sad<br />sa
-        defa<br />ult<br />dsa
-        defa<br />ult<br />dsasd
-        sa<br />dsad<br />sd
-        s<br />d
-        s<br />
-        dis<br />abledsads
-        <br />
-        <br />
-        disa<br />bl<br />edsads
-        s<br />
-        def<br />aul<br />tds<br />asdsd
-        s<br />
-        d<br />efaul<br />tds<br />asdsd
-        <br />
-        <br />
-        sa<br />dsa<br />ds<br />dds
-        de<br />faults
-        def<br />aul<br />tdsa
+      <div>
+        <Helmet title={extra.name} />
+        <BusinessDash />
+        <MercaderiaDash />
       </div>
     );
   }
@@ -87,10 +66,8 @@ export class Home extends PureComponent {
 }
 
 const connector: Connector<{}, Props> = connect(
-  ({ home, auth }: Reducer) => ({ home, auth }),
-  (dispatch: Dispatch) => ({
-    fetchUsersIfNeeded: () => dispatch(action.fetchUsersIfNeeded()),
-  }),
+  ({ cognito }: Reducer) => ({ cognito }),
+  () => ({ }),
 );
 
 export default connector(Home);

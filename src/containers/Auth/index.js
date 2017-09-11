@@ -47,7 +47,6 @@ export default function (Component) {
 
     renderUserList = (): Element<any> => {
       const { auth } = this.props;
-
       if (auth.signedIn === true) {
         return (
           <Component {...this.props} />
