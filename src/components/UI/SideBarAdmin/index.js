@@ -232,7 +232,7 @@ export class SideBarAdmin extends PureComponent {
       toggleLocalSelect(true);
     };
 
-    const _localname = local.list[local.id].name;
+    const _localname = String(local.list[local.id].name).toLocaleUpperCase();
 
     const getTableList = (item, i) => {
       let classbtn = 'grid-bg-itemone';
@@ -259,13 +259,14 @@ export class SideBarAdmin extends PureComponent {
         <nav className="sidebar-nav">
           <Nav>
             {navList(arrlist.items)}
+            <li key={1} className="divider-line mt-2 mb-2" />
+            <li key={0} className="nav-item nav-dropdown">
+              <a className="nav-link text-warning" onClick={toggleLocalSelect} role="button" tabIndex={0}>
+                <i className="icon-puzzle" />{_localname}
+              </a>
+            </li>
           </Nav>
         </nav>
-        <div>
-          <a className="nav-link pl-4" onClick={toggleLocalSelect} role="button" tabIndex={0}>
-            <i className="icon-puzzle mr-2" />{_localname}
-          </a>
-        </div>
         <Modal isOpen={modallocal} toggle={toggleLocalSelect} className={'modal-sm'}>
           <ModalHeader toggle={toggleLocalSelect}>{'Locales'}</ModalHeader>
           <ModalBody>

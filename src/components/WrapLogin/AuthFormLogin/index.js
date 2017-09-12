@@ -125,7 +125,7 @@ export class AuthFormLogin extends PureComponent {
     const { error } = this.state;
 
     if (error === '') {
-      return <p className="text-muted">Sign In to your account</p>;
+      return <p className="text-muted">Iniciar sesión con tu cuenta</p>;
     }
 
     return <p className="text-danger">{error}</p>;
@@ -142,9 +142,9 @@ export class AuthFormLogin extends PureComponent {
     return (
       <Col md="8" className="animated fadeIn">
         <CardGroup className="mb-0">
-          <Card className="p-4">
+          <Card className="p-sm-4">
             <CardBlock className="card-body">
-              <h1>Login</h1>
+              <h1>Iniciar Sesion</h1>
               {getSubTitle()}
               <InputGroup className="mb-3">
                 <InputGroupAddon><i className="icon-user" /></InputGroupAddon>
@@ -155,11 +155,11 @@ export class AuthFormLogin extends PureComponent {
                 <Input type="password" placeholder="Password" value={state.password} onChange={handleChangePassword} />
               </InputGroup>
               <Row>
-                <Col xs="6">
-                  <Button color="primary" className="px-4" onClick={handlerClickLogin} >Login</Button>
+                <Col xs="12" sm="6" className="mb-2">
+                  <Button color="primary" className="px-4" onClick={handlerClickLogin} block>Iniciar!</Button>
                 </Col>
-                <Col xs="6" className="text-right">
-                  <Button color="link" className="px-0" onClick={handlerClickForgtoPass} >Forgot password?</Button>
+                <Col xs="6" className="text-right mb-2">
+                  <Button color="link" className="px-0" onClick={handlerClickForgtoPass} >Olvidaste tu contraseña?</Button>
                 </Col>
               </Row>
             </CardBlock>
