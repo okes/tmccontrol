@@ -167,11 +167,15 @@ export class SideBarAdmin extends PureComponent {
       return null;
     };
 
+    const handleClickitemchico = () => {
+      document.body.classList.toggle('sidebar-mobile-show');
+    };
+
     const navItem = (item, key) => {
       const classes = classNames('nav-link', item.class);
       return (
         <NavItem key={key}>
-          <NavLink to={item.url} className={classes} activeClassName="active">
+          <NavLink to={item.url} onClick={handleClickitemchico} className={classes} activeClassName="active">
             <i className={item.icon} />{item.name}{getbadge(item.badge)}
           </NavLink>
         </NavItem>
