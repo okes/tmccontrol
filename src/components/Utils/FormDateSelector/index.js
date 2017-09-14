@@ -61,7 +61,12 @@ export class FormDateSelector extends PureComponent {
   }
 
   goHandler = (day, mon, yea) => {
-    const nnye = new Date(Number(yea), Number(mon), Number(day));
+    const newdate = new Date();
+    const getHour = newdate.getHours();
+    const getMin = newdate.getMinutes();
+    const getSec = newdate.getSeconds();
+    const getMilSec = newdate.getHours();
+    const nnye = new Date(Number(yea), Number(mon), Number(day), getHour, getMin, getSec, getMilSec); // eslint-disable-line max-len
     this.props.onChange(nnye);
   }
 
